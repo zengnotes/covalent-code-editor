@@ -184,20 +184,22 @@ export class TdCodeEditorComponent implements OnInit, AfterViewInit, ControlValu
         if (this._webview) {
             this._webview.send('setLanguage', language);
         } else {
-            let currentValue: string = this._editor.getValue();
-            this._editor.dispose();
-            let myDiv: HTMLDivElement = this._editorContainer.nativeElement;
-            this._editor = monaco.editor.create(myDiv, Object.assign({
-                value: currentValue,
-                language: language,
-                theme: this._theme,
-            }, this.editorOptions));
-            this._editor.getModel().onDidChangeContent( (e: any) => {
-                this._fromEditor = true;
-                this.writeValue(this._editor.getValue());
-            });
-            this.onEditorConfigurationChanged.emit(undefined);
-            this.onEditorLanguageChanged.emit(undefined);
+           if (this._editor) {
+              let currentValue: string = this._editor.getValue();
+              this._editor.dispose();
+              let myDiv: HTMLDivElement = this._editorContainer.nativeElement;
+              this._editor = monaco.editor.create(myDiv, Object.assign({
+                  value: currentValue,
+                  language: language,
+                  theme: this._theme,
+              }, this.editorOptions));
+              this._editor.getModel().onDidChangeContent( (e: any) => {
+                  this._fromEditor = true;
+                  this.writeValue(this._editor.getValue());
+              });
+              this.onEditorConfigurationChanged.emit(undefined);
+              this.onEditorLanguageChanged.emit(undefined);
+          }
         }
     }
   }
